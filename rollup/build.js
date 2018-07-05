@@ -3,7 +3,7 @@ const babel = require('rollup-plugin-babel');
 const ts = require('rollup-plugin-typescript2');
 
 rollup({
-  input: 'main.ts',
+  input: 'src/main.ts',
   plugins: [
     ts(),
     babel({
@@ -13,7 +13,7 @@ rollup({
   ]
 }).then((bundle) => {
   return bundle.write({
-    file: 'miner.js',
+    file: 'lib/miner.js',
     name: 'miner',
     format: 'umd'
   });

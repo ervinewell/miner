@@ -4,7 +4,7 @@
   "description": "Gather console/network/error data",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node rollup/build.js"
   },
   "repository": {
     "type": "git",
