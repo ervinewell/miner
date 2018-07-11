@@ -8,20 +8,14 @@ const cjs = require('rollup-plugin-commonjs');
 const watcher = watch({
   input: 'example/index.ts',
   output: {
-    file: 'lib/example.js',
+    file: 'example/example.bundle.js',
     name: 'example',
-    format: 'umd',
-    globals: {
-      '@babel/runtime/core-js/json/stringify': 'JSON'
-    }
+    format: 'umd'
   },
   watch: {
     chokidar: true,
     include: ['src/**', 'example/**']
   },
-  externals: [
-    '@babel/runtime/core-js/json/stringify'
-  ],
   plugins: [
     resolve({
       browser: true

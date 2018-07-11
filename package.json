@@ -2,7 +2,7 @@
   "name": "minerjs",
   "version": "1.0.0",
   "description": "Gather console/network/error data",
-  "main": "index.js",
+  "main": "lib/miner.js",
   "scripts": {
     "build": "node rollup/build.js",
     "dev": "node rollup/dev.js"
