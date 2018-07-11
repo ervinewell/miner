@@ -36,14 +36,14 @@ export function catchConsoler (window: Window): Observable<Consoler> {
   console.error = (...args): void => {
     ee.emit('consoler', {
       tag: 'error',
-      message: [].slice.call(args)
+      msg: [].slice.call(args)
     });
     error.call(this, ...args);
   };
   console.warn = (...args): void => {
     ee.emit('consoler', {
       tag: 'warn',
-      message: [].slice.call(args)
+      msg: [].slice.call(args)
     });
     warn.call(this, ...args);
   };
@@ -53,7 +53,7 @@ export function catchConsoler (window: Window): Observable<Consoler> {
     timerMap[id] = Date.now();
     ee.emit('consoler', {
       tag: 'time',
-      message: [`timer-${id} start...`]
+      msg: [`timer-${id} start...`]
     });
     time.call(this, id);
   };
@@ -62,13 +62,13 @@ export function catchConsoler (window: Window): Observable<Consoler> {
     if (id in timerMap) {
       ee.emit('consoler', {
         tag: 'timeEnd',
-        message: [`timer-${id} end: ${now - timerMap[id]}ms`]
+        msg: [`timer-${id} end: ${now - timerMap[id]}ms`]
       });
       delete timerMap[id];
     } else {
       ee.emit('consoler', {
         tag: 'error',
-        message: [`timer-${id}不存在`]
+        msg: [`timer-${id}不存在`]
       });
     }
     timeEnd.call(this, id);

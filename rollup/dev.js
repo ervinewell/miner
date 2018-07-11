@@ -3,23 +3,35 @@ const babel = require('rollup-plugin-babel');
 const ts = require('rollup-plugin-typescript2');
 const resolve = require('rollup-plugin-node-resolve');
 const serve = require('rollup-plugin-serve');
+const cjs = require('rollup-plugin-commonjs');
 
 const watcher = watch({
-  input: 'src/main.ts',
+  input: 'example/index.ts',
   output: {
-    file: 'lib/miner.js',
-    name: 'miner',
-    format: 'umd'
+    file: 'lib/example.js',
+    name: 'example',
+    format: 'umd',
+    globals: {
+      '@babel/runtime/core-js/json/stringify': 'JSON'
+    }
   },
   watch: {
     chokidar: true,
-    include: 'src/**'
+    include: ['src/**', 'example/**']
   },
+  externals: [
+    '@babel/runtime/core-js/json/stringify'
+  ],
   plugins: [
+    resolve({
+      browser: true
+    }),
     serve({
       contentBase: ['example', 'lib'],
     }),
-    resolve(),
+    cjs({
+      include: 'node_modules/**'
+    }),
     ts(),
     babel({
       exclude: 'node_modules/**',
