@@ -11,96 +11,11 @@ import {
   isFunction as _isFunction
 } from 'lodash';
 import { sendMessage } from './sendMessage';
-import { stringify } from './utils';
-
-/**
- * 监听js错误
- */
-export const setupErrorListener = (window: any): void => {
-  window.onerror = (
-    msg: string,
-    url: string,
-    line: number,
-    column: number,
-    err: any
-  ) => {
-    sendMessage({
-      type: 'JSError',
-      message: {
-        msg,
-        url,
-        position: `第${line}行左起第${column}个字符`,
-        error: stringify(err)
-      }
-    });
-  }
-}
-
-/**
- * 拦截控制台信息
- */
-export const setupConsole = function (window: any): void {
-  const { console } = window;
-  const { log, time, timeEnd, error, warn } = console;
-  console.log = (...args): void => {
-    if (args[0] !== 'conan-inner-log') { // 不监听conan内部打印信息
-      sendMessage({
-        type: 'Console',
-        message: [].map.call(args, formatMsg),
-        tag: 'log'
-      });
-    }
-    log.call(this, ...args);
-  }
-  console.error = (...args): void => {
-    sendMessage({
-      type: 'Console',
-      tag: 'error',
-      message: [].map.call(args, formatMsg)
-    });
-    error.call(this, ...args);
-  };
-  console.warn = (...args): void => {
-    sendMessage({
-      type: 'Console',
-      tag: 'warn',
-      message: [].map.call(args, formatMsg)
-    });
-    warn.call(this, ...args);
-  };
-  
-  const timerMap = {};
-  console.time = (id = 'default'): void => {
-    timerMap[id] = Date.now();
-    sendMessage({
-      type: 'Console',
-      message: [`timer-${id} start...`]
-    });
-    time.call(this, id);
-  };
-  console.timeEnd = (id = 'default'): void => {
-    const now = Date.now();
-    if (id in timerMap) {
-      sendMessage({
-        type: 'Console',
-        message: [`timer-${id} end: ${now - timerMap[id]}ms`]
-      });
-      delete timerMap[id];
-    } else {
-      sendMessage({
-        type: 'Console',
-        tag: 'error',
-        message: [`timer-${id}不存在`]
-      });
-    }
-    timeEnd.call(this, id);
-  }; 
-};
 
 /**
  * 网络请求信息-XHR
  */
-export const setupXHR = function (window: any): void {
+export const setupXHR = function (window: Window): void {
   const { XMLHttpRequest: XHR } = window;
   const { open, setRequestHeader, send } = XHR.prototype;
   XHR.prototype.open = function (...args): void {
