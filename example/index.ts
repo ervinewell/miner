@@ -13,4 +13,5 @@ const miner = new Miner({
 const $app = document.getElementById('app');
 miner.consoler$.subscribe(item => {
   $app.innerHTML += `${item.tag}: ${item.msg}<br />`;
+  // $app.innerHTML += `${JSON.stringify(item)}<br />`;
 })
